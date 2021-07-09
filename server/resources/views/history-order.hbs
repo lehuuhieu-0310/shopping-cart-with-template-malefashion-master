@@ -1,0 +1,44 @@
+<h2 style="text-align: center" class="mt-4">HISTORY ORDER</h2>
+<div class="container my-4">
+    {{#each order}}
+    <div class="card my-4">
+        <div class="card-body">
+            <ul class="list-group">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total Price:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each cart.products}}
+                        <tr>
+                            <th scope="row">{{index @index 1}}</th>
+                            <td>
+                                <div class="row align-items-center">
+                                    <img src="img/product/{{img}}" style="width: 6rem" class="mr-4">
+                                    <div>
+                                        {{productName}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>$ {{price}}</td>
+                            <td>{{quantity}}</td>
+                            <td>$ {{quantityAndprice quantity price}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <strong class="float-right" style="color: red">Total: $ {{cart.totalPrice}}</strong>
+            <strong class="float-right mr-5" style="color: red">Create At: {{createAt}}</strong>
+        </div>
+    </div>
+    {{/each}}
+</div>

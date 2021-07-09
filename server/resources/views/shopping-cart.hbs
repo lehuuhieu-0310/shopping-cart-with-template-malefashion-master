@@ -1,0 +1,165 @@
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Shopping Cart</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/index">Home</a>
+                        <a href="/shop">Shop</a>
+                        <span>Shopping Cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shopping Cart Section Begin -->
+{{#unless message}}
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="shopping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each cartProduct}}
+                            <input type="hidden" value="{{productId}}" id="productId">
+                            <tr>
+                                <td class="product__cart__item">
+                                    <div class="product__cart__item__pic">
+                                        <img src="img/product/{{img}}" alt="" style="width: 6rem;">
+                                    </div>
+                                    <div class="product__cart__item__text">
+                                        <h6>{{productName}}</h6>
+                                        <h5 id="productPrice">$ {{price}}</h5>
+                                    </div>
+                                </td>
+                                <td class="quantity__item">
+                                    <div class="quantity">
+                                        <div class="pro-qty-2">
+                                            <input type="text" value={{quantity}} readonly>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart__price" id="quantityAndprice">$ {{quantityAndprice quantity price}}</td>
+                                <td class="cart__close"><a href="/removeCart/{{productId}}"><i
+                                            class="fa fa-close"></i></a></td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a href="/shop">Continue Shopping</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn update__btn">
+                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__discount">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit">Apply</button>
+                    </form>
+                </div>
+                <div class="cart__total">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Subtotal <span id="total1">$ {{totalPrice}}</span></li>
+                        <li>Total <span id="total2">$ {{totalPrice}}</span></li>
+                    </ul>
+                    <a href="/checkout" class="primary-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{/unless}}
+{{#if message}}
+<h2 class="err my-2" style="text-align: center;">{{message}}</h2>
+{{/if}}
+<!-- Shopping Cart Section End -->
+
+<script>
+
+    var proQty = $('.pro-qty-2')
+    proQty.prepend('<span class="fa fa-angle-left dec qtybtn"></span>')
+    proQty.append('<span class="fa fa-angle-right inc qtybtn"></span>')
+
+    var data = {}
+    var quantityAndprice = document.getElementById('quantityAndprice').innerHTML.slice('2')
+    var productPrice = document.getElementById('productPrice').textContent.slice('2')
+    var productId = document.getElementById('productId').value
+    var username = document.getElementById('username').value
+    data.quantityAndprice = quantityAndprice
+    data.productPrice = productPrice
+    data.productId = productId
+    data.username = username
+
+    proQty.on('click', '.qtybtn', function () {
+        var $button = $(this)
+        var oldValue = $button.parent().find('input').val()
+        if ($button.hasClass('inc')) {
+            var newVal = parseFloat(oldValue) + 1
+
+            $.ajax({
+                url: '/updateCart/plus',
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (res) {
+                    console.log(res)
+                    document.getElementById('quantityAndprice').innerHTML = '$ ' + res.quantityAndprice
+                    document.getElementById('total1').innerHTML = '$ ' + res.total
+                    document.getElementById('total2').innerHTML = '$ ' + res.total
+                    document.getElementById('priceHeader').innerHTML = '$ ' + res.total
+                }
+            })
+
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 0) {
+                var newVal = parseFloat(oldValue) - 1
+
+                $.ajax({
+                    url: '/updateCart/minus',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: data,
+                    success: function (res) {
+                        console.log(res)
+                        document.getElementById('quantityAndprice').innerHTML = '$ ' + res.quantityAndprice
+                        document.getElementById('total1').innerHTML = '$ ' + res.total
+                        document.getElementById('total2').innerHTML = '$ ' + res.total
+                        document.getElementById('priceHeader').innerHTML = '$ ' + res.total
+                    }
+                })
+
+            } else {
+                newVal = 0
+            }
+        }
+        $button.parent().find('input').val(newVal)
+    })
+
+</script>

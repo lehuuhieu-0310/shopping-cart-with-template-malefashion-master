@@ -1,0 +1,154 @@
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Check Out</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/index">Home</a>
+                        <a href="/shop">Shop</a>
+                        <span>Check Out</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <form action="#">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
+                                here</a> to enter your code</h6>
+                        <h6 class="checkout__title">Billing Details</h6>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Fist Name<span>*</span></p>
+                                    <input type="text" name="firstName" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Last Name<span>*</span></p>
+                                    <input type="text" name="lastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Address<span>*</span></p>
+                            <input type="text" placeholder="Street Address" class="checkout__input__add" name="address"
+                                required>
+                        </div>
+                        <div class="checkout__input">
+                            <p>City<span>*</span></p>
+                            <input type="text" name="city" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Phone<span>*</span></p>
+                                    <input type="text" name="phone" id="phone" required oninput="checkNumber()">
+                                    <div id="phoneErr" style="color: red;"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Email<span>*</span></p>
+                                    <input type="text" name="email" required id="email" oninput="checkEmail()">
+                                    <div id="emailErr" style="color: red;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            <h4 class="order__title">Your order</h4>
+                            <div class="checkout__order__products">Product <span>Total</span></div>
+                            {{#each cartProduct}}
+                            <ul class="checkout__total__products">
+                                <li>{{productName}} <span>$ {{quantityAndprice quantity price}}</span></li>
+                            </ul>
+                            {{/each}}
+                            <ul class="checkout__total__all">
+                                <li>Subtotal <span>$ {{totalPrice}}</span></li>
+                                <li>Total <span>$ {{totalPrice}}</span></li>
+                            </ul>
+                            <div class="checkout__input__checkbox">
+                                <label for="payment">
+                                    Check Payment
+                                    <input type="checkbox" id="payment">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="checkout__input__checkbox">
+                                <label for="paypal">
+                                    Paypal
+                                    <input type="checkbox" id="paypal">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <button type="submit" class="site-btn">PLACE ORDER</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+
+<script>
+
+    const form = document.querySelector('form')
+
+    form.addEventListener('submit', async e => {
+        e.preventDefault()
+
+        var username = document.getElementById('username').value
+        var firstName = form.firstName.value
+        var lastName = form.lastName.value
+        var address = form.address.value
+        var city = form.city.value
+        var phone = form.phone.value
+        var email = form.email.value
+
+        await fetch('/checkout', {
+            method: 'POST',
+            body: JSON.stringify({ username, firstName, lastName, address, city, phone, email }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(location.assign('/thank-you'))
+            .catch(err => console.log(err))
+    })
+
+    function checkNumber() {
+        var phone = document.getElementById('phone').value
+        if (isNaN(phone)) {
+            document.getElementById('phoneErr').innerHTML = 'phone must be a number'
+        } else {
+            document.getElementById('phoneErr').innerHTML = ''
+        }
+    }
+
+    function checkEmail() {
+        var email = document.getElementById('email').value
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        if (email.length != 0) {
+            if (re.test(email)) {
+                document.getElementById('emailErr').innerHTML = ''
+            } else {
+                document.getElementById('emailErr').innerHTML = 'email not correct format'
+            }
+        } else {
+            document.getElementById('emailErr').innerHTML = ''
+        }
+    }
+
+</script>

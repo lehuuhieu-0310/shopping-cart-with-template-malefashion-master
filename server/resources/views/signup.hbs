@@ -1,0 +1,74 @@
+<div class="container">
+    <h2 style="text-align: center;" class="my-2">Sign Up</h2>
+    <form class="my-2 col-md-4" style="margin: 0 auto;">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" id="inputEmail4" name="username" required>
+            <div class="err" id="usernameErr"></div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword4">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+            <div class="err" id="passwordErr"></div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword4">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            <div class="err" id="confirmPasswordErr"></div>
+        </div>
+        <div class="form-group">
+            <label>Fullname</label>
+            <input type="text" class="form-control" name="fullname" required>
+            <div class="err" id="fullnameErr"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </form>
+</div>
+
+<script>
+
+    function verifyPassword(password, confirmPassword) {
+
+        const confirmPasswordErr = document.getElementById('confirmPasswordErr')
+
+        if (password != confirmPassword) {
+            confirmPasswordErr.innerHTML = 'confirm password not match'
+        }
+    }
+
+    const form = document.querySelector('form')
+
+    form.addEventListener('submit', async e => {
+        e.preventDefault()
+
+        const username = form.username.value
+        const password = form.password.value
+        const confirmPassword = form.confirmPassword.value
+        const fullname = form.fullname.value
+
+        const usernameErr = document.getElementById('usernameErr')
+        const passwordErr = document.getElementById('passwordErr')
+        const confirmPasswordErr = document.getElementById('confirmPasswordErr')
+        const fullnameErr = document.getElementById('fullnameErr')
+
+        usernameErr.innerHTML = ''
+        confirmPasswordErr.innerHTML = ''
+
+        await fetch('/signup', {
+            method: 'POST',
+            body: JSON.stringify({ username, password, fullname }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(async res => await res.json())
+            .then(data => {
+                verifyPassword(password, confirmPassword)
+                if (data.user) {
+                    location.assign('/')
+                } else if (data.err) {
+                    usernameErr.innerHTML = data.err
+                }
+            })
+            .catch(err => console.log(err))
+
+    })
+</script>
