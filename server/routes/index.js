@@ -10,6 +10,10 @@ const removeCartRouter = require('./removeCart')
 const checkoutRouter = require('./checkout')
 const thankyouRouter = require('./thankyou')
 const historyOrderRouter = require('./history-order')
+const adminIndexRouter = require('./admin-index')
+const adminUpdateProductRouter = require('./admin-update-product')
+const adminNewProductRouter = require('./admin-new-product')
+const adminDeleteProductRouter = require('./admin-delete-product')
 
 const { checkUser, requireAuth } = require('../middlewares/auth')
 
@@ -27,6 +31,11 @@ function route(app) {
     app.use('/checkout', requireAuth, checkoutRouter)
     app.use('/thank-you', requireAuth, thankyouRouter)
     app.use('/history-order', requireAuth, historyOrderRouter)
+    app.use('/admin-index', adminIndexRouter)
+    app.use('/admin-update-product', adminUpdateProductRouter)
+    app.use('/admin-new-product', adminNewProductRouter)
+    app.use('/admin-delete-product', adminDeleteProductRouter)
+
 
     app.get("/", (req, res) => {
         res.render("index")

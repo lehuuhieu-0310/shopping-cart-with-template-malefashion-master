@@ -1,0 +1,61 @@
+<div class="container my-2">
+    <h2 style="text-align: center;" class="mb-4">Update Product</h2>
+    <table class="table">
+        <tbody>
+            {{#if product}}
+            <form>
+                <tr>
+                    <th scope="row">ProductName</th>
+                    <td>
+                        <input type="hidden" value="{{product._id}}" name="productId">
+                        <input type="text" value="{{product.productName}}" name="productName" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Price</th>
+                    <td>
+                        <input type="text" value="{{product.price}}" name="price" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Quantity</th>
+                    <td>
+                        <input type="text" name="quantity" value="{{product.quantity}}" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="text-center">
+                            <button class="btn btn-success">Update</button>
+                        </div>
+                    </td>
+                </tr>
+                {{/if}}
+            </form>
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    const form = document.querySelector('form')
+    form.addEventListener('submit', async e => {
+        e.preventDefault
+
+        const productId = form.productId.value
+        const productName = form.productName.value
+        const price = form.price.value
+        const quantity = form.quantity.value
+
+        await fetch('/admin-update-product', {
+            method: 'POST',
+            body: JSON.stringify({ productId, productName, price, quantity }),
+            headers: { 'Content-type': 'application/json' }
+        })
+            .then(() => {
+                location.assign('/admin-index')
+            })
+            .catch(err => console.log(err))
+    })
+
+</script>

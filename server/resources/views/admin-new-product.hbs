@@ -1,0 +1,57 @@
+<div class="container my-4">
+    <h2 class="text-center my-2">Create Product</h2>
+    <table class="table">
+        <tbody>
+            <form>
+                <tr>
+                    <th scope="row">Product Name</th>
+                    <td>
+                        <input type="text" name="productName" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Price</th>
+                    <td>
+                        <input type="text" name="price" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Quantity</th>
+                    <td>
+                        <input type="text" name="quantity" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="text-center">
+                            <button class="btn btn-success">Create</button>
+                        </div>
+                    </td>
+                </tr>
+            </form>
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    const form = document.querySelector('form')
+    form.addEventListener('submit', async e => {
+        e.preventDefault
+
+        const productName = form.productName.value
+        const price = form.price.value
+        const quantity = form.quantity.value
+
+        await fetch('/admin-new-product', {
+            method: 'POST',
+            body: JSON.stringify({ productName, price, quantity }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(() => {
+                location.assign('/admin-index')
+            })
+            .catch(err => console.log(err))
+    })
+
+</script>
