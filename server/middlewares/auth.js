@@ -49,4 +49,18 @@ const requireAuth = (req, res, next) => {
     }
 }
 
-module.exports = { checkUser, requireAuth }
+const checkRole = async (req, res, next) => {
+    const username = res.locals.user.username
+    await User.findOne({ username })
+        .then(user => {
+            const role = user.role
+            if (role != 'admin') {
+                res.redirect('/')
+            } else {
+                next
+            }
+        })
+        .catch(err => console.log(err))
+}
+
+module.exports = { checkUser, requireAuth, checkRole }

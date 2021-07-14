@@ -15,7 +15,7 @@ const adminUpdateProductRouter = require('./admin-update-product')
 const adminNewProductRouter = require('./admin-new-product')
 const adminDeleteProductRouter = require('./admin-delete-product')
 
-const { checkUser, requireAuth } = require('../middlewares/auth')
+const { checkUser, requireAuth, checkRole } = require('../middlewares/auth')
 
 function route(app) {
 
@@ -31,10 +31,10 @@ function route(app) {
     app.use('/checkout', requireAuth, checkoutRouter)
     app.use('/thank-you', requireAuth, thankyouRouter)
     app.use('/history-order', requireAuth, historyOrderRouter)
-    app.use('/admin-index', adminIndexRouter)
-    app.use('/admin-update-product', adminUpdateProductRouter)
-    app.use('/admin-new-product', adminNewProductRouter)
-    app.use('/admin-delete-product', adminDeleteProductRouter)
+    app.use('/admin-index', requireAuth, checkRole, adminIndexRouter)
+    app.use('/admin-update-product', requireAuth, checkRole, adminUpdateProductRouter)
+    app.use('/admin-new-product', requireAuth, checkRole, adminNewProductRouter)
+    app.use('/admin-delete-product', requireAuth, checkRole, adminDeleteProductRouter)
 
 
     app.get("/", (req, res) => {
