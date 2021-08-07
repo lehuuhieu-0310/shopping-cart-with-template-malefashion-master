@@ -74,8 +74,10 @@
                     if (data.user) {
                         console.log(data.user)
                         location.assign(`/verify-email?username=${username}`)
-                    } else if (data.err) {
+                    } else if (data.err.includes('username')) {
                         usernameErr.innerHTML = data.err
+                    } else if (data.err.includes('email')) {
+                        emailErr.innerHTML = data.err
                     }
                 })
                 .catch(err => console.log(err))

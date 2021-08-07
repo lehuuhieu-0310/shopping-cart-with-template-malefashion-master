@@ -1,6 +1,9 @@
 const nodemailter = require('nodemailer')
+const bcrypt = require('bcrypt')
 
 const User = require('../model/User')
+
+const saltRounds = 10
 
 class SignupController {
 
@@ -8,7 +11,7 @@ class SignupController {
         res.render('signup')
     }
 
-    signup(req, res) {
+    async signup(req, res) {
         const codeVerify = Math.floor(Math.random() * 900000)
         //config mail server
         const transporter = nodemailter.createTransport({
@@ -31,6 +34,8 @@ class SignupController {
         user.codeVerify = codeVerify
         user.active = false
         user.role = 'user'
+        const passwordHash = await bcrypt.hash(user.password, saltRounds)
+        user.password = passwordHash
         user.save()
             .then(user => {
                 transporter.sendMail(mainOptions, (err, info) => {
@@ -38,14 +43,18 @@ class SignupController {
                         console.log(err)
                         res.status(500).json({ 'err': 'error in send mail' })
                     } else {
-                        console.log(info)
                         res.status(201).json({ user })
                     }
                 })
             })
             .catch(err => {
+                console.log(err)
                 if (err.message.includes('11000')) {
-                    res.status(400).json({ 'err': 'username is already taken' })
+                    if (err.message.includes('username')) {
+                        res.status(400).json({ 'err': 'username is already taken' })
+                    } else if (err.message.includes('email')) {
+                        res.status(400).json({ 'err': 'email is already taken' })
+                    }
                 }
             })
     }
