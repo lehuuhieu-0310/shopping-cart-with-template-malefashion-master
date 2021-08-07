@@ -9,7 +9,11 @@ const User = new Schema({
         unique: true
     },
     password: String,
-    fullname: String
+    fullname: String,
+    email: String,
+    codeVerify: String,
+    active: Boolean,
+    role: String
 })
 User.statics.login = async function (username, password) {
     var user = await this.findOne({ username })

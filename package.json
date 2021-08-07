@@ -4,7 +4,8 @@
     "description": "Thank you for using our template!",
     "main": "app.js",
     "scripts": {
-        "start": "nodemon app.js",
+        "dev": "nodemon app.js",
+        "start": "node app.js",
         "watch": "node-sass --watch server/resources/sass/app.scss server/public/css/app.css",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -12,12 +13,14 @@
     "license": "ISC",
     "dependencies": {
         "cookie-parser": "^1.4.5",
+        "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "express-handlebars": "^5.3.2",
         "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
         "mongoose": "^5.13.0",
         "node-sass": "^6.0.1",
+        "nodemailer": "^6.6.3",
         "nodemon": "^2.0.9"
     }
 }

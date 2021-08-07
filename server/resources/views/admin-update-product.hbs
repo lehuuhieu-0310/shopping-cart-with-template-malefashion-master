@@ -3,12 +3,23 @@
     <table class="table">
         <tbody>
             {{#if product}}
-            <form>
+            <form enctype="multipart/form-data">
                 <tr>
                     <th scope="row">ProductName</th>
                     <td>
                         <input type="hidden" value="{{product._id}}" name="productId">
                         <input type="text" value="{{product.productName}}" name="productName" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Photo</th>
+                    <td>
+                        <div class="align-items-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+                                width="200px" class="mr-2">
+                            <input type="hidden" name="oldPhoto" value="">
+                            <input type="file" name="photo">
+                        </div>
                     </td>
                 </tr>
                 <tr>

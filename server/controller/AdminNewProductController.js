@@ -1,10 +1,8 @@
-
 const Product = require('../model/Product')
 
 class AdminNewProductController {
 
     form(req, res) {
-
         res.render('admin-new-product')
     }
 

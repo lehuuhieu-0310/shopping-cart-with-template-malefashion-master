@@ -99,6 +99,9 @@ a:focus {
 	outline: none;
 	color: red;
 } */
+.back-to-login a:hover{
+	color: #007bff !important
+}
 a.add-cart:hover{
 	text-decoration: none;
 	outline: none;

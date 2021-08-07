@@ -21,6 +21,11 @@
             <input type="text" class="form-control" name="fullname" required>
             <div class="err" id="fullnameErr"></div>
         </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email" required>
+            <div class="err" id="emailErr"></div>
+        </div>
         <button type="submit" class="btn btn-primary">Sign up</button>
     </form>
 </div>
@@ -33,7 +38,9 @@
 
         if (password != confirmPassword) {
             confirmPasswordErr.innerHTML = 'confirm password not match'
+            return false
         }
+        return true
     }
 
     const form = document.querySelector('form')
@@ -45,30 +52,33 @@
         const password = form.password.value
         const confirmPassword = form.confirmPassword.value
         const fullname = form.fullname.value
+        const email = form.email.value
 
         const usernameErr = document.getElementById('usernameErr')
         const passwordErr = document.getElementById('passwordErr')
         const confirmPasswordErr = document.getElementById('confirmPasswordErr')
         const fullnameErr = document.getElementById('fullnameErr')
+        const emailErr = document.getElementById('emailErr')
 
         usernameErr.innerHTML = ''
         confirmPasswordErr.innerHTML = ''
 
-        await fetch('/signup', {
-            method: 'POST',
-            body: JSON.stringify({ username, password, fullname }),
-            headers: { 'Content-Type': 'application/json' }
-        })
-            .then(async res => await res.json())
-            .then(data => {
-                verifyPassword(password, confirmPassword)
-                if (data.user) {
-                    location.assign('/')
-                } else if (data.err) {
-                    usernameErr.innerHTML = data.err
-                }
+        if (verifyPassword(password, confirmPassword)) {
+            fetch('/signup', {
+                method: 'POST',
+                body: JSON.stringify({ username, password, fullname, email }),
+                headers: { 'Content-Type': 'application/json' }
             })
-            .catch(err => console.log(err))
-
+                .then(res => res.json())
+                .then(data => {
+                    if (data.user) {
+                        console.log(data.user)
+                        location.assign(`/verify-email?username=${username}`)
+                    } else if (data.err) {
+                        usernameErr.innerHTML = data.err
+                    }
+                })
+                .catch(err => console.log(err))
+        }
     })
 </script>

@@ -39,15 +39,21 @@
         })
             .then(async res => await res.json())
             .then(data => {
-                if (data.user.role == 'user') {
-                    location.assign('/')
-                } else if (data.user.role == 'admin') {
-                    location.assign('/admin-index')
+                if (data.user) {
+                    if (data.user.role === 'user') {
+                        location.assign('/')
+                    } else if (data.user.role === 'admin') {
+                        location.assign('/admin-index')
+                    }
                 } else if (data.err) {
-                    var alertErr = document.querySelector('.alert-err')
-                    alertErr.classList.add('alert')
-                    alertErr.classList.add('alert-danger')
-                    alertErr.textContent = data.err
+                    if (data.err === 'please verify email') {
+                        location.assign(`/verify-email?username=${username}`)
+                    } else if (data.err) {
+                        var alertErr = document.querySelector('.alert-err')
+                        alertErr.classList.add('alert')
+                        alertErr.classList.add('alert-danger')
+                        alertErr.textContent = data.err
+                    }
                 }
             })
             .catch(err => console.log(err))

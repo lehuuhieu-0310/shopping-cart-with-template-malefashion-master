@@ -1,4 +1,3 @@
-
 const singinRouter = require('./signin')
 const signupRouter = require('./signup')
 const signoutRouter = require('./signout')
@@ -14,6 +13,7 @@ const adminIndexRouter = require('./admin-index')
 const adminUpdateProductRouter = require('./admin-update-product')
 const adminNewProductRouter = require('./admin-new-product')
 const adminDeleteProductRouter = require('./admin-delete-product')
+const verfiyEmailRouter = require('./verifyEmail')
 
 const { checkUser, requireAuth, checkRole } = require('../middlewares/auth')
 
@@ -35,26 +35,31 @@ function route(app) {
     app.use('/admin-update-product', requireAuth, checkRole, adminUpdateProductRouter)
     app.use('/admin-new-product', requireAuth, checkRole, adminNewProductRouter)
     app.use('/admin-delete-product', requireAuth, checkRole, adminDeleteProductRouter)
+    app.use('/verify-email', verfiyEmailRouter)
 
 
-    app.get("/", (req, res) => {
-        res.render("index")
+    app.get('/', (req, res) => {
+        res.render('index')
     })
 
-    app.get("/about", (req, res) => {
-        res.render("about")
+    app.get('/notify', (req, res) => {
+        res.render('notify')
     })
-    app.get("/blog-details", (req, res) => {
-        res.render("blog-details")
+
+    app.get('/about', (req, res) => {
+        res.render('about')
     })
-    app.get("/blog", (req, res) => {
-        res.render("blog")
+    app.get('/blog-details', (req, res) => {
+        res.render('blog-details')
     })
-    app.get("/contact", (req, res) => {
-        res.render("contact")
+    app.get('/blog', (req, res) => {
+        res.render('blog')
     })
-    app.get("/shop-details", (req, res) => {
-        res.render("shop-details")
+    app.get('/contact', (req, res) => {
+        res.render('contact')
+    })
+    app.get('/shop-details', (req, res) => {
+        res.render('shop-details')
     })
 }
 

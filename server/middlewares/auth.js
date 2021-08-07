@@ -1,15 +1,13 @@
-
 const jwt = require('jsonwebtoken')
 
 const User = require('../model/User')
 const Cart = require('../model/Cart')
 
-
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt
 
     if (token) {
-        jwt.verify(token, 'secret', async function (err, decoded) {
+        jwt.verify(token, process.env.SECRET_BCRYPT_KEY, async function (err, decoded) {
             if (err) {
                 res.locals.user = null
                 next()
@@ -36,7 +34,7 @@ const checkUser = (req, res, next) => {
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt
     if (token) {
-        jwt.verify(token, 'secret', (err, decoded) => {
+        jwt.verify(token, process.env.SECRET_BCRYPT_KEY, (err, decoded) => {
             if (err) {
                 console.log('err at auth: ', err.message)
                 res.redirect('/signin')
@@ -49,15 +47,15 @@ const requireAuth = (req, res, next) => {
     }
 }
 
-const checkRole = async (req, res, next) => {
+const checkRole = (req, res, next) => {
     const username = res.locals.user.username
-    await User.findOne({ username })
+    User.findOne({ username })
         .then(user => {
             const role = user.role
             if (role != 'admin') {
                 res.redirect('/')
             } else {
-                next
+                next()
             }
         })
         .catch(err => console.log(err))

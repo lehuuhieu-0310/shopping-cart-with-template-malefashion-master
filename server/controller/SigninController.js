@@ -13,7 +13,10 @@ class SigninController {
 
         const { username, password } = req.body
         try {
-            var user = await User.login(username, password)
+            const user = await User.login(username, password)
+            if (user.active === false) {
+                return res.status(400).json({ err: 'please verify email' })
+            }
             const token = createToken(user._id)
             res.cookie('jwt', token, {
                 httpOnly: true,
@@ -30,7 +33,7 @@ class SigninController {
 const maxAge = 15 * 60
 
 const createToken = id => {
-    return jwt.sign({ id }, 'secret', {
+    return jwt.sign({ id }, process.env.SECRET_BCRYPT_KEY, {
         expiresIn: maxAge
     })
 }

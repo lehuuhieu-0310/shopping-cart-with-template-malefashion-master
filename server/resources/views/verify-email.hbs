@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="m-4">
+        <h3 class="text-center">Code verify has been send to your email</h3>
+        <form class="my-2">
+            <label>Please input your code to verify email:</label>
+            <input type="hidden" value="{{username}}" name="username">
+            <input type="text" name="code" class="form-control">
+            <div id="codeErr" class="err"></div>
+            <button class=" btn btn-success my-2" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    const form = document.querySelector('form')
+
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+
+        const code = form.code.value
+        const username = form.username.value
+
+        const codeErr = document.getElementById('codeErr')
+
+        fetch('/verify-email', {
+            method: 'POST',
+            body: JSON.stringify({ username, code }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message == 'successfully') {
+                    location.assign('/notify')
+                } else {
+                    codeErr.innerHTML = data.message
+                }
+            })
+            .catch(err => console.log(err))
+    })
+
+</script>

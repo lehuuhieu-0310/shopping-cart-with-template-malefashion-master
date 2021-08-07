@@ -2,12 +2,16 @@
     <h2 class="text-center my-2">Create Product</h2>
     <table class="table">
         <tbody>
-            <form>
+            <form enctype="multipart/form-data">
                 <tr>
                     <th scope="row">Product Name</th>
                     <td>
                         <input type="text" name="productName" class="form-control">
                     </td>
+                </tr>
+                <tr>
+                    <th scope="row">Photo</th>
+                    <td><input type="file" name="photo"></td>
                 </tr>
                 <tr>
                     <th scope="row">Price</th>
