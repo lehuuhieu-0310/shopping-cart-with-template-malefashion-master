@@ -5,6 +5,7 @@ class SignoutController {
         res.cookie('jwt', '', {
             maxAge: 1
         })
+        console.log('sign out')
         res.redirect('/')
     }
 }

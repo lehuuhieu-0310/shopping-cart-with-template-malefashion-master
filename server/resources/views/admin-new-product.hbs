@@ -2,7 +2,7 @@
     <h2 class="text-center my-2">Create Product</h2>
     <table class="table">
         <tbody>
-            <form enctype="multipart/form-data">
+            <form action="/admin-new-product" method="POST" enctype="multipart/form-data">
                 <tr>
                     <th scope="row">Product Name</th>
                     <td>
@@ -11,7 +11,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Photo</th>
-                    <td><input type="file" name="photo"></td>
+                    <td><input type="file" name="image"></td>
                 </tr>
                 <tr>
                     <th scope="row">Price</th>
@@ -39,7 +39,7 @@
 
 <script>
 
-    const form = document.querySelector('form')
+    /*const form = document.querySelector('form')
     form.addEventListener('submit', async e => {
         e.preventDefault
 
@@ -56,6 +56,6 @@
                 location.assign('/admin-index')
             })
             .catch(err => console.log(err))
-    })
+    })*/
 
 </script>

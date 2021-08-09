@@ -4,7 +4,7 @@ const Cart = require('../model/Cart')
 class RemoveCartController {
     async index(req, res) {
         const productId = req.params.productId
-        const username = res.locals.user.username
+        const username = req.user.username
         await Cart.findOne({ username, checkout: false })
             .then(async cart => {
                 const products = cart.products

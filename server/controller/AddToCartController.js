@@ -5,7 +5,7 @@ const Product = require('../model/Product')
 class AddToCartController {
 
     async cart(req, res) {
-        const username = res.locals.user.username
+        const username = req.user.username
         const id = req.params._id
         const { _id, productName, price, img } = await Product.findById(id)
         let cart = await Cart.findOne({ username, checkout: false })

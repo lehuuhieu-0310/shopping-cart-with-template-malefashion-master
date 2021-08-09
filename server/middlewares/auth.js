@@ -5,22 +5,27 @@ const Cart = require('../model/Cart')
 
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt
-
     if (token) {
         jwt.verify(token, process.env.SECRET_BCRYPT_KEY, async function (err, decoded) {
             if (err) {
-                res.locals.user = null
+                req.user = null
+                console.log('err', err)
                 next()
             } else {
-                var user = await User.findById(decoded.id)
-                res.locals.user = user.toObject()
+                var user = await User.findById(decoded.id).lean()
+                //render 'user' to hbs and save 'user' in req/res cycle
+                res.locals.user = user
+                //save 'user' in locals
+                res.app.locals.user = user
+                req.user = user
 
                 const username = user.username
-                const cart = await Cart.findOne({ username, checkout: false })
+                const cart = await Cart.findOne({ username, checkout: false }).lean()
                 if (cart) {
-                    res.locals.cart = cart.toObject()
+                    res.locals.cart = cart
+                    req.cart = cart
                 } else {
-                    res.locals.cart = null
+                    req.cart = null
                 }
                 next()
             }
@@ -48,7 +53,10 @@ const requireAuth = (req, res, next) => {
 }
 
 const checkRole = (req, res, next) => {
-    const username = res.locals.user.username
+    // const username = req.user.username
+    // const username = res.locals.user.username
+    const username = res.app.locals.user.username
+
     User.findOne({ username })
         .then(user => {
             const role = user.role

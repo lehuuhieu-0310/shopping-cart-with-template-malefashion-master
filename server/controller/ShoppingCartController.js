@@ -4,7 +4,7 @@ const Cart = require('../model/Cart')
 class ShoppingCartController {
 
     async view(req, res) {
-        const user = res.locals.user
+        const user = req.user
         const username = user.username
         await Cart.findOne({ username, checkout: false }).lean()
             .then(cartProduct => {

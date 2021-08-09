@@ -16,7 +16,8 @@
             <tr>
                 <th scope="row">{{index @index 1}}</th>
                 <td class="row align-items-center">
-                    <img src="img/product/{{img}}" style="width: 6rem;" class="mr-4">
+                    <img src="data:{{contentType}};base64,{{imgBase64}}" style="width: 6rem;" class="mr-4">
+                    {{!-- <img src="/img/product/{{img}}" style="width: 6rem;" class="mr-4"> --}}
                     <div>{{productName}}</div>
                 </td>
                 <td class="td-middle">$ {{price}}</td>

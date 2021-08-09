@@ -6,7 +6,7 @@ const Order = require('../model/Order')
 class CheckoutController {
 
     async form(req, res) {
-        const username = res.locals.user.username
+        const username = req.user.username
         await Cart.findOne({ username, checkout: false }).lean()
             .then(cartProduct => res.render('checkout', { cartProduct: cartProduct.products, totalPrice: cartProduct.totalPrice }))
             .catch(err => console.log('checkoutcontroller: ', err))
