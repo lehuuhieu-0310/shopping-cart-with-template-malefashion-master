@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const path = require('path')
 const exphbs = require('express-handlebars')
 const cookieParser = require('cookie-parser')
@@ -15,13 +14,27 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'server/public')))
-app.engine('.hbs', exphbs({
+
+const hbs = exphbs.create({
     extname: '.hbs',
     helpers: {
         quantityAndprice: (quantity, price) => quantity * price,
-        index: (a, b) => a + b
+        index: (a, b) => a + b,
+        pagination: (totalPage, options) => {
+            var page = ''
+            for (let i = 1; i <= totalPage; i++) {
+                page += options.fn(i)
+            }
+            return page
+        },
+        checkPage: (pageNumber, currentPage) => {
+            if (pageNumber == currentPage) {
+                return 'class="active"'
+            }
+        }
     }
-}))
+})
+app.engine('.hbs', hbs.engine)
 app.set('view engine', '.hbs')
 app.set('views', path.join(__dirname, 'server/resources/views'))
 

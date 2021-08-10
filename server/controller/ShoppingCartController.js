@@ -1,12 +1,11 @@
-
 const Cart = require('../model/Cart')
 
 class ShoppingCartController {
 
-    async view(req, res) {
+    view(req, res) {
         const user = req.user
         const username = user.username
-        await Cart.findOne({ username, checkout: false }).lean()
+        Cart.findOne({ username, checkout: false }).lean()
             .then(cartProduct => {
                 if (cartProduct) {
                     res.render('shopping-cart', { cartProduct: cartProduct.products, totalPrice: cartProduct.totalPrice })

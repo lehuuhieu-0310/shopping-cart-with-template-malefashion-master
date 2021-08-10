@@ -1,11 +1,10 @@
-
 const Cart = require('../model/Cart')
 
 class RemoveCartController {
-    async index(req, res) {
+    index(req, res) {
         const productId = req.params.productId
         const username = req.user.username
-        await Cart.findOne({ username, checkout: false })
+        Cart.findOne({ username, checkout: false })
             .then(async cart => {
                 const products = cart.products
                 const indexProduct = products.findIndex(p => p.productId == productId)

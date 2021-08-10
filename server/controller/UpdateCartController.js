@@ -1,12 +1,11 @@
-
 const Cart = require('../model/Cart')
 
 class UpdateCartController {
 
-    async plusQuantity(req, res) {
+    plusQuantity(req, res) {
         var { quantityAndprice, productPrice, productId, username } = req.body
-        await Cart.findOne({ username, checkout: false })
-            .then(async cart => {
+        Cart.findOne({ username, checkout: false })
+            .then(cart => {
                 if (cart) {
                     let indexItem = cart.products.findIndex(p => p.productId == productId)
                     let productItem = cart.products[indexItem]
@@ -15,7 +14,7 @@ class UpdateCartController {
 
                     cart.totalPrice = Number(cart.totalPrice) + Number(productPrice)
                     quantityAndprice = Number(productItem.price) * Number(productItem.quantity)
-                    await cart.save()
+                    cart.save()
                         .then(res.json({ quantityAndprice: quantityAndprice, total: cart.totalPrice }))
                         .catch(err => console.log(err))
                 } else {
@@ -25,10 +24,10 @@ class UpdateCartController {
             .catch(err => console.log('shoppingcartcontroller: ', err))
     }
 
-    async minusQuantity(req, res) {
+    minusQuantity(req, res) {
         var { quantityAndprice, productPrice, productId, username } = req.body
-        await Cart.findOne({ username, checkout: false })
-            .then(async cart => {
+        Cart.findOne({ username, checkout: false })
+            .then(cart => {
                 if (cart) {
                     let indexItem = cart.products.findIndex(p => p.productId == productId)
                     let productItem = cart.products[indexItem]
@@ -37,7 +36,7 @@ class UpdateCartController {
 
                     cart.totalPrice = Number(cart.totalPrice) - Number(productPrice)
                     quantityAndprice = Number(productItem.price) * Number(productItem.quantity)
-                    await cart.save()
+                    cart.save()
                         .then(res.json({ quantityAndprice: quantityAndprice, total: cart.totalPrice }))
                         .catch(err => console.log(err))
                 } else {

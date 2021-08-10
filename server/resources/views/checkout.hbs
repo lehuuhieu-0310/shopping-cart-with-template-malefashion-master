@@ -119,21 +119,30 @@
         var phone = form.phone.value
         var email = form.email.value
 
-        await fetch('/checkout', {
-            method: 'POST',
-            body: JSON.stringify({ username, firstName, lastName, address, city, phone, email }),
-            headers: { 'Content-Type': 'application/json' }
-        })
-            .then(location.assign('/thank-you'))
-            .catch(err => console.log(err))
+        if (checkNumber() && checkEmail()) {
+            await fetch('/checkout', {
+                method: 'POST',
+                body: JSON.stringify({ username, firstName, lastName, address, city, phone, email }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(location.assign('/thank-you'))
+                .catch(err => console.log(err))
+        }
     })
 
     function checkNumber() {
         var phone = document.getElementById('phone').value
         if (isNaN(phone)) {
             document.getElementById('phoneErr').innerHTML = 'phone must be a number'
+            return false
         } else {
-            document.getElementById('phoneErr').innerHTML = ''
+            if (phone.length == 0) {
+                document.getElementById('phoneErr').innerHTML = 'please input your number phone'
+                return false
+            } else {
+                document.getElementById('phoneErr').innerHTML = ''
+                return true
+            }
         }
     }
 
@@ -143,11 +152,14 @@
         if (email.length != 0) {
             if (re.test(email)) {
                 document.getElementById('emailErr').innerHTML = ''
+                return true
             } else {
                 document.getElementById('emailErr').innerHTML = 'email not correct format'
+                return false
             }
         } else {
-            document.getElementById('emailErr').innerHTML = ''
+            document.getElementById('emailErr').innerHTML = 'please input email'
+            return false
         }
     }
 

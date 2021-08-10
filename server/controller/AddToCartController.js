@@ -1,4 +1,3 @@
-
 const Cart = require('../model/Cart')
 const Product = require('../model/Product')
 
@@ -44,7 +43,7 @@ class AddToCartController {
             }
             res.redirect('/shop')
         } catch (err) {
-            console.log('AddToCartController: ', err)
+            console.log(err)
         }
     }
 }

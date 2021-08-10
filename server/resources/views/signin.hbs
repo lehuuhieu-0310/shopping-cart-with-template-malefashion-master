@@ -41,7 +41,7 @@
             .then(data => {
                 if (data.user) {
                     if (data.user.role === 'user') {
-                        location.assign('/')
+                        location.assign('/shop')
                     } else if (data.user.role === 'admin') {
                         location.assign('/admin-index')
                     }
