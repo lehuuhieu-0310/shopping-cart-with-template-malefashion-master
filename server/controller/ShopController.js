@@ -5,9 +5,9 @@ class ShopController {
     index(req, res) {
         let perPage = 3
         let page = req.query.currentPage || 1
-        Product.find().limit(perPage).skip((perPage * page) - perPage).lean()
+        Product.find({ quantity: { $gte: 1 } }).limit(perPage).skip((perPage * page) - perPage).lean()
             .then(product => {
-                Product.countDocuments()
+                Product.countDocuments({ quantity: { $gte: 1 } })
                     .then(count => {
                         res.render('shop', {
                             product,

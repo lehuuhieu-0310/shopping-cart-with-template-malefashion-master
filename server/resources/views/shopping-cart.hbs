@@ -35,8 +35,8 @@
                         </thead>
                         <tbody>
                             {{#each cartProduct}}
-                            <input type="hidden" value="{{productId}}" id="productId">
                             <tr>
+                                <input type="hidden" value="{{productId}}" id="productId">
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
                                         <img src="img/product/{{img}}" alt="" style="width: 6rem;">
@@ -49,7 +49,9 @@
                                 <td class="quantity__item">
                                     <div class="quantity">
                                         <div class="pro-qty-2">
-                                            <input type="text" value={{quantity}} readonly>
+                                            {{!-- <span class="fa fa-angle-left dec qtybtn"></span> --}}
+                                            <input type="text" id="productQuantity" value={{quantity}} readonly>
+                                            {{!-- <span class="fa fa-angle-right inc qtybtn"></span> --}}
                                         </div>
                                     </div>
                                 </td>
@@ -61,6 +63,7 @@
                         </tbody>
                     </table>
                 </div>
+                <div style="padding-bottom: 20px; color: red; font-size: 20px;" class="update-error"></div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
@@ -69,7 +72,11 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            {{!-- <a href="#"><i class="fa fa-spinner update-cart"></i> Update cart</a> --}}
+                            <form>
+                                <input type="submit" value="UPDATE CART"
+                                    style="background-color: black; color: white; width: 200px; height: 51px; font-size: 14px; font-weight: 700; font: 'Nunito Sans';">
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -122,38 +129,11 @@
         if ($button.hasClass('inc')) {
             var newVal = parseFloat(oldValue) + 1
 
-            $.ajax({
-                url: '/updateCart/plus',
-                type: 'POST',
-                dataType: 'json',
-                data: data,
-                success: function (res) {
-                    console.log(res)
-                    document.getElementById('quantityAndprice').innerHTML = '$ ' + res.quantityAndprice
-                    document.getElementById('total1').innerHTML = '$ ' + res.total
-                    document.getElementById('total2').innerHTML = '$ ' + res.total
-                    document.getElementById('priceHeader').innerHTML = '$ ' + res.total
-                }
-            })
 
         } else {
             // Don't allow decrementing below zero
             if (oldValue > 0) {
                 var newVal = parseFloat(oldValue) - 1
-
-                $.ajax({
-                    url: '/updateCart/minus',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: data,
-                    success: function (res) {
-                        console.log(res)
-                        document.getElementById('quantityAndprice').innerHTML = '$ ' + res.quantityAndprice
-                        document.getElementById('total1').innerHTML = '$ ' + res.total
-                        document.getElementById('total2').innerHTML = '$ ' + res.total
-                        document.getElementById('priceHeader').innerHTML = '$ ' + res.total
-                    }
-                })
 
             } else {
                 newVal = 0
@@ -162,4 +142,49 @@
         $button.parent().find('input').val(newVal)
     })
 
+</script>
+
+<script>
+    const form = document.querySelector('form')
+    var username = document.getElementById('username').value
+
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+
+        let tr = document.querySelectorAll('table > tbody > tr')
+        //tr is node list
+
+        //chuyen nodelist thanh 1 mang
+        tr = [...tr]
+
+        let data = {}
+
+        data.products = tr.map(tr => ({
+            productId: tr.querySelector('#productId').value,
+            price: tr.querySelector('#productPrice').innerHTML.slice(2),
+            quantity: tr.querySelector('#productQuantity').value
+        }))
+
+        data.username = username
+
+        const updateError = document.querySelector('.update-error')
+
+        console.log(data)
+
+        fetch('/updateCart', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(async res => await res.json())
+            .then(data => {
+                if (data.error) {
+                    updateError.innerHTML = data.error
+                } else if (data.message) {
+                    location.assign('/shopping-cart')
+                }
+            })
+            .catch(err => console.log(err))
+
+    })
 </script>

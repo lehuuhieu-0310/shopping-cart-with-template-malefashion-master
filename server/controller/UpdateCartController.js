@@ -1,4 +1,5 @@
 const Cart = require('../model/Cart')
+const Product = require('../model/Product')
 
 class UpdateCartController {
 
@@ -45,6 +46,40 @@ class UpdateCartController {
             })
             .catch(err => console.log('shoppingcartcontroller: ', err))
     }
+
+    async index(req, res) {
+        let products = req.body.products
+        let username = req.body.username
+        var temp = 0
+        await Promise.all(products.map(element => (async function (element) {
+            let productId = element.productId
+            let product = await Product.findById(productId)
+            if (product.quantity < element.quantity) {
+                temp++
+            }
+        })(element)))
+
+        if (temp == 0) {
+            try {
+                const cart = await Cart.findOne({ username, checkout: false })
+                let totalPrice = 0
+                await Promise.all(products.map(element => (async element => {
+                    let productId = element.productId
+                    let itemIndex = cart.products.findIndex(p => p.productId == productId)
+                    cart.products[itemIndex].quantity = element.quantity
+                    totalPrice = totalPrice + cart.products[itemIndex].quantity * cart.products[itemIndex].price
+                    cart.totalPrice = totalPrice
+                    await cart.save()
+                })(element)))
+            } catch (error) {
+                console.log(error)
+            }
+            res.status(200).json({ 'message': 'successfully' })
+        } else {
+            res.status(400).json({ 'error': 'quantity buy cant > quantity in store' })
+        }
+    }
 }
+
 
 module.exports = new UpdateCartController

@@ -1,5 +1,6 @@
 const Cart = require('../model/Cart')
 const Order = require('../model/Order')
+const Product = require('../model/Product')
 
 
 class CheckoutController {
@@ -11,24 +12,35 @@ class CheckoutController {
             .catch(err => console.log('checkoutcontroller: ', err))
     }
 
-    save(req, res) {
+    async save(req, res) {
         const { username, firstName, lastName, address, city, phone, email } = req.body
-        Cart.findOne({ username, checkout: false })
-            .then(async cart => {
-                cart.checkout = 'true'
-                await cart.save()
-                await Order.create({
-                    username,
-                    cart: cart,
-                    firstName,
-                    lastName,
-                    address,
-                    city,
-                    phone,
-                    email
-                })
+        try {
+            const cart = await Cart.findOne({ username, checkout: false })
+            cart.checkout = 'true'
+            let products = cart.products
+            await Promise.all(products.map(element => (async function (element) {
+                let id = element.productId
+                let product = await Product.findById(id)
+                product.quantity -= element.quantity
+                await product.save()
+            })(element)))
+
+            await cart.save()
+            await Order.create({
+                username,
+                cart: cart,
+                firstName,
+                lastName,
+                address,
+                city,
+                phone,
+                email
             })
-            .catch(err => console.log(err))
+
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
 }
