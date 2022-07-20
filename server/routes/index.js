@@ -16,6 +16,7 @@ const adminDeleteProductRouter = require('./admin-delete-product')
 const verfiyEmailRouter = require('./verifyEmail')
 
 const { checkUser, requireAuth, checkRole } = require('../middlewares/auth')
+const Product = require('../model/Product')
 
 function route(app) {
 
@@ -60,6 +61,160 @@ function route(app) {
     })
     app.get('/shop-details', (req, res) => {
         res.render('shop-details')
+    })
+    app.get('/create-data', (req, res) => {
+        var product1 = new Product({
+            productName: '1',
+            img: 'product-1.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product2 = new Product({
+            productName: '2',
+            img: 'product-2.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product3 = new Product({
+            productName: '3',
+            img: 'product-3.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product4 = new Product({
+            productName: '4',
+            img: 'product-4.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product5 = new Product({
+            productName: '5',
+            img: 'product-5.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product6 = new Product({
+            productName: '6',
+            img: 'product-6.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product7 = new Product({
+            productName: '7',
+            img: 'product-7.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product8 = new Product({
+            productName: '8',
+            img: 'product-8.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product9 = new Product({
+            productName: '9',
+            img: 'product-9.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+        var product10 = new Product({
+            productName: '10',
+            img: 'product-10.jpg',
+            imgBase64: '',
+            contentType: '',
+            price: 10,
+            quantity: 10,
+        })
+
+        product1.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product1._id)
+            }
+        })
+        product2.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product2._id)
+            }
+        })
+        product3.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product3._id)
+            }
+        })
+        product4.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product4._id)
+            }
+        })
+        product5.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product5._id)
+            }
+        })
+        product6.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product6._id)
+            }
+        })
+        product7.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product7._id)
+            }
+        })
+        product8.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product8._id)
+            }
+        })
+        product9.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product9._id)
+            }
+        })
+        product10.save((err) => {
+            if (err) {
+                console.log('error: ' + err)
+            } else {
+                console.log('success: ' + product10._id)
+            }
+        })
+
     })
 }
 
